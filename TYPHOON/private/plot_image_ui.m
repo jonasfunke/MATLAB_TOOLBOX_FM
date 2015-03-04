@@ -26,7 +26,10 @@ parse(p, img, varargin{:});
 if strcmp(p.Results.type,'image')
     cur_fig = imagesc(img, clim_start); colorbar, axis image 
 else
-    cur_fig = figure('units','normalized','outerposition',[0 0 1 1]);
+    scrsz = get(0,'screensize');
+    %cur_fig = figure('units','normalized','outerposition',[0.25 0.25 0.5 0.5]);
+    img_size_norm = size(img)*1000/max(size(img));
+    cur_fig = figure('units','pixel','outerposition',[scrsz(3)/2-img_size_norm(2)/2 scrsz(4)/4+img_size_norm(1)/2 img_size_norm(2) img_size_norm(1)]);
     set(cur_fig,'toolbar','figure');
     imagesc(img, clim_start); colorbar, axis image
 end
