@@ -28,5 +28,52 @@ classdef movie < handle
         
         drift; % stores displacement in x and y over whole movie through drift.
     end
+    
+    methods
+        %constructor
+        function obj = movie(pname, fname, first, last, sequence) % fname is the filename of the first fits-file
+            obj.sequence = sequence;
+            obj.pname = pname;
+            obj.fname = cell(1,1);
+            obj.fname{1} = fname;
+            
+            if strcmp(fname(end-2:end), 'tif')
+                obj.input = 1; % read tiff data
+            else
+                obj.input = 0; % read fits data
+            end
+            
+            if obj.input == 1 % tiff-stack
+                tmp = dir([pname filesep '*.tif']);
+                obj.fnames = {tmp.name};
+                obj.info = 'Tiff-Stack info';
+                obj.sizeX = size(imread([pname filesep obj.fnames{1}]),2);
+                obj.sizeY = size(imread([pname filesep obj.fnames{1}]),1);
+                obj.mov_length = length(obj.fnames);
+            else % fits
+                obj.info = cell(1,1);
+                obj.info{1} = fitsinfo([obj.pname filesep obj.fname{1}]);
+                
+                obj.N_frame_per_fits = 4095; %obj.info{1}.PrimaryData.Size(3);
+                
+                obj.sizeX = obj.info{1}.PrimaryData.Size(1); 
+                obj.sizeY = obj.info{1}.PrimaryData.Size(2);
+                
+                tmp = dir([pname filesep fname(1:end-4) '_X*.fits']); %returns additional  change * to wildcard for 1-2 character/integers
+                [~,idx] = sort([tmp.datenum]);
+                tmp = tmp(idx);
+                for i=1:length(tmp)
+                    obj.fname = [obj.fname tmp(i).name];
+                    obj.info = [obj.info fitsinfo([obj.pname filesep tmp(i).name])];
+                end
+                
+                f_tot = 0; % calculate total number of frames
+                for i=1:length(obj.fname)
+                    f_tot = f_tot + obj.info{i}.PrimaryData.Size(3);           
+                end
+                obj.mov_length = f_tot;
+            end
+        end
+    end
       
 end        
