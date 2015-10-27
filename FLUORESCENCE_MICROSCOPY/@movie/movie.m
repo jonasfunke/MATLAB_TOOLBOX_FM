@@ -73,6 +73,7 @@ classdef movie < handle
                 end
                 obj.mov_length = f_tot;
             end
+            disp('Movie class created.')
         end
     end
       
