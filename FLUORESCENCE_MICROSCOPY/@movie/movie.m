@@ -75,6 +75,9 @@ classdef movie < handle
             end
             disp('Movie class created.')
         end
+        
+        % read frames
+        frames = getFrames(obj, sequence, first, last)
     end
       
 end        
