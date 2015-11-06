@@ -76,22 +76,10 @@ classdef movie < handle
             disp('Movie class created.')
         end
         
-        % generate a list of images to be read from the movie
+        % read frames
         frames = getFrames(obj, sequence, first, last)
-        
-        % reads one frame
-        [img] = readFrame(obj,framenumber)
-        
-        % reads the next N_read frames
-        [tmp, frames_out, go_on] = readNext(obj)
-        
-        % initialize the counter
-        initRead(obj)
-        
-        % determine peak-finding threshholds
-        [h_min, p_out] = get_h_min(obj, r_find, N_img)
-    
-            
+        %reads one frame
+        function [img] = readFrame(obj,framenumber)
     
     end
       
