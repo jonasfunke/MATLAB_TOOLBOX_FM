@@ -3,7 +3,7 @@ classdef movie < handle
     %   Detailed explanation goes here
     
     properties
-        frames; %all images to be read
+        frames; % all images to be read
         N_read = 300; % number of images to read in one portion
         counter = 1; % internal counter for reading the movie
         
@@ -11,15 +11,15 @@ classdef movie < handle
         first; % first image to be read
         last; % last image to be read
         
-        pname; %pathname of file location
-        fname; %filename of file
+        pname; % pathname of file location
+        fname; % filename of file
         
         sizeX; % number of pixel in X-dimension
         sizeY; % number of pixel in Y-dimension
         mov_length; % number of frames in thw whole movue
         
-        info; %fits info
-        h_min; %minimal heigth for peak fidning
+        info; % fits info
+        h_min; % minimal heigth for peak fidning
         
         input; % 0=fits, 1=tiff-stack
         fnames; % cell with all filenames, only for tiff-stack
@@ -88,10 +88,11 @@ classdef movie < handle
         % initialize the counter
         initRead(obj)
         
-        % determine peak-finding threshholds
-        [h_min, p_out] = get_h_min(obj, r_find, N_img)
-    
-            
+        % generate average image, starting from first frame until N_max
+        [ avg_frame ] = average_image(obj, N_min, N_frame )
+        
+        % determine peak-finding thresholds
+        [h_min, p_out] = get_h_min(obj, r_find, N_img)   
     
     end
       
