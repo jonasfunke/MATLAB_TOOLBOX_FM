@@ -25,6 +25,7 @@ classdef movie < handle
         fnames; % cell with all filenames, only for tiff-stack
         
         N_frame_per_fits; % stores the number of frames in one fits file
+        add_upon_reading; % value added to frame after fitsread. Depends on .fits intercept (
         
         drift; % stores displacement in x and y over whole movie through drift.
     end
@@ -55,6 +56,7 @@ classdef movie < handle
                 obj.info{1} = fitsinfo([obj.pname filesep obj.fname{1}]);
                 
                 obj.N_frame_per_fits = 4095; %obj.info{1}.PrimaryData.Size(3);
+                obj.add_upon_reading = (obj.info{1}.PrimaryData.Intercept==0)*32768;
                 
                 obj.sizeX = obj.info{1}.PrimaryData.Size(1); 
                 obj.sizeY = obj.info{1}.PrimaryData.Size(2);
