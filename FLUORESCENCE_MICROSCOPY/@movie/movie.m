@@ -16,22 +16,22 @@ classdef movie < handle
         
         sizeX; % number of pixel in X-dimension
         sizeY; % number of pixel in Y-dimension
-        mov_length; % number of frames in thw whole movue
+        mov_length; % number of frames in the whole movie
         
         info; %fits info
-        h_min; %minimal heigth for peak fidning
+        h_min; %minimal height for peak finding
         
         input; % 0=fits, 1=tiff-stack
         fnames; % cell with all filenames, only for tiff-stack
         
-        N_frame_per_fits; % stores the number of frames in one fits-file
+        N_frame_per_fits; % stores the number of frames in one fits file
         
         drift; % stores displacement in x and y over whole movie through drift.
     end
     
     methods
         %constructor
-        function obj = movie(pname, fname, first, last, sequence) % fname is the filename of the first fits-file
+        function obj = movie(pname, fname, first, last, sequence) % fname is the filename of the first fits file
             obj.sequence = sequence;
             obj.pname = pname;
             obj.fname = cell(1,1);
@@ -59,7 +59,7 @@ classdef movie < handle
                 obj.sizeX = obj.info{1}.PrimaryData.Size(1); 
                 obj.sizeY = obj.info{1}.PrimaryData.Size(2);
                 
-                tmp = dir([pname filesep fname(1:end-4) '_X*.fits']); %returns additional  change * to wildcard for 1-2 character/integers
+                tmp = dir([pname filesep fname(1:end-4) '_X*.fits']); %returns additional change * to wildcard for 1-2 character/integers
                 [~,idx] = sort([tmp.datenum]);
                 tmp = tmp(idx);
                 for i=1:length(tmp)
@@ -88,7 +88,7 @@ classdef movie < handle
         % initialize the counter
         initRead(obj)
         
-        % determine peak-finding threshholds
+        % determine peak-finding thresholds
         [h_min, p_out] = get_h_min(obj, r_find, N_img)
     
             
