@@ -15,7 +15,6 @@ function [h_min, p_out] = get_h_min(obj, r_find, N_img)
 
     close all
     figure('units','normalized','outerposition',[0 0 1 1])
-    img_mean = mean(img(:));
     img_std = std(img(:));            
 
     p_7std = p(find(p(:,4)>=7*img_std), :); % this is just an estimate, #of peaks found may vary since peak_find algorithm return height as int not double
