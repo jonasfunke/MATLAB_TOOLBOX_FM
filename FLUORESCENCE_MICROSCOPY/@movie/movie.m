@@ -92,8 +92,16 @@ classdef movie < handle
         
         % determine peak-finding thresholds
         [h_min, p_out] = get_h_min(obj, r_find, N_img)
-    
-            
+        
+        % obtain intensity time traces by integrating specific ROIs in movie
+        itraces = traces_movie_position(obj, positions, r_integrate)
+        
+        % integrate intensities over specific ROIs in one frame (suitable for parfor)
+        ints = int_spots_in_frame(obj, frame_idx, spots_pos, d_int)
+        
+        % integrate intensities over specific ROIs in many frames (returns
+        % spot intensity traces)
+        itraces = int_spots_in_frames(obj, frame_nums, spots_pos, d_int)
     
     end
       
