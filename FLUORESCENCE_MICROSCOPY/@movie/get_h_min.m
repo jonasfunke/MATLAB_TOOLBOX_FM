@@ -49,29 +49,25 @@ function [h_min, p_out] = get_h_min(obj, r_find, N_img)
     set(gca, 'XLim', [0 xhist(end)])
     xlabel('Minimal height'), ylabel('# of peaks found')
     axis square
-
-
     
-    % choose if min high is default or chosen
-    choice = strcmp(questdlg('How to choose min heigth','min heigth choice','Default (5*sigma)','Hand','Default (5*sigma)'), 'Default (5*sigma)');
+    % choose if min height is default or chosen
+    choice = strcmp(questdlg('How to choose min height','min height choice','Default (5*sigma)','Hand','Default (5*sigma)'), 'Default (5*sigma)');
         
-        switch choice
-            
-            case 1  % default
-                    h_min = 5*img_std; 
+    switch choice
 
-            case 0  % hand
-                    promp
-                    options.WindowStyle='normal';
-                    prompt={'Enter min heigth (default=5*sigma):'};
-                    def={num2str(round(5*img_std))};
-                    threshold =inputdlg(prompt, strcat('Enter threshold:'), 1,   def, options);  % leave out
-                    h_min =str2double(threshold(1)); % leave out
-                    pause(0.1) % leave out
-                    close all
-         end
+        case 1  % default
+                h_min = 5*img_std; 
+
+        case 0  % hand
+                options.WindowStyle='normal';
+                prompt={'Enter min height (default=5*sigma):'};
+                def={num2str(round(5*img_std))};
+                threshold =inputdlg(prompt, strcat('Enter threshold:'), 1,   def, options);  % leave out
+                h_min =str2double(threshold(1)); % leave out
+                pause(0.1) % leave out
+                close all
+     end
     
-
     obj.h_min = h_min;
     p_out = p(find(p(:,4)>=h_min),:);
     
