@@ -26,15 +26,17 @@ function [h_min, p_out] = get_h_min(obj, r_find, N_img)
     imagesc(img), colorbar, axis image, colormap gray, hold on
     if size(p_3std,1)>0
         h(1) = plot(p_3std(:,1)+1, p_3std(:,2)+1, 'ro');
-    end
-    if size(p_5std,1)>0
-        h(2) = plot(p_5std(:,1)+1, p_5std(:,2)+1, 'go');
-    end
-    if size(p_7std,1)>0
-        h(3) = plot(p_7std(:,1)+1, p_7std(:,2)+1, 'bo');
-    end
-    legend(h, {['3\sigma = ' num2str(round(3*img_std)) ], ['5\sigma = ' num2str(round(5*img_std)) ], ['7\sigma = ' num2str(round(7*img_std)) ]})
-
+        if size(p_5std,1)>0
+            h(2) = plot(p_5std(:,1)+1, p_5std(:,2)+1, 'go');
+        end
+        if size(p_7std,1)>0
+            h(3) = plot(p_7std(:,1)+1, p_7std(:,2)+1, 'bo');
+        end
+        legend(h, {['3\sigma = ' num2str(round(3*img_std)) ], ['5\sigma = ' num2str(round(5*img_std)) ], ['7\sigma = ' num2str(round(7*img_std)) ]})
+    else
+        h = plot(p(p(:,4)>=.5*img_std,1)+1, p(p(:,4)>=.5*img_std,2)+1,'ro');
+        legend(h, {['\frac{\sigma}{2} = ' num2str(round(.5*img_std))]});
+    end   
 
     subplot(1, 2, 2)
     xhist = min(p(:,4)):5:max(p(:,4));
