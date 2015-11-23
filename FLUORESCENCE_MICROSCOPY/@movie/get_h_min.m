@@ -17,9 +17,6 @@ function [h_min, p_out] = get_h_min(obj, r_find, N_img)
     figure('units','normalized','outerposition',[0 0 1 1])
     img_std = std(img(:));            
 
-    p_7std = p(find(p(:,4)>=7*img_std), :); % this is just an estimate, #of peaks found may vary since peak_find algorithm return height as int not double
-    p_5std = p(find(p(:,4)>=5*img_std), :);
-    p_3std = p(find(p(:,4)>=3*img_std), :);
 
     % plot
     subplot(1, 2, 1)
@@ -37,6 +34,9 @@ function [h_min, p_out] = get_h_min(obj, r_find, N_img)
         h = plot(p(p(:,4)>=.5*img_std,1)+1, p(p(:,4)>=.5*img_std,2)+1,'ro');
         legend(h, {['\frac{\sigma}{2} = ' num2str(round(.5*img_std))]});
     end   
+        p_7std = p(p(:,4)>=7*img_std, :); % this is just an estimate, #of peaks found may vary since peak_find algorithm return height as int not double
+        p_5std = p(p(:,4)>=5*img_std, :);
+        p_3std = p(p(:,4)>=3*img_std, :);
 
     subplot(1, 2, 2)
     xhist = min(p(:,4)):5:max(p(:,4));
@@ -69,6 +69,5 @@ function [h_min, p_out] = get_h_min(obj, r_find, N_img)
      end
     
     obj.h_min = h_min;
-    p_out = p(find(p(:,4)>=h_min),:);
-    
+    p_out = p(p(:,4)>=h_min,:);
 end
