@@ -29,7 +29,9 @@ function [h_min, p_out] = get_h_min(obj, r_find, N_img, varargin)
         else % fits
             img = fitsread([obj.pname filesep obj.fname{1}],  'Info', obj.info{1}, 'PixelRegion',{[1 obj.sizeX], [1 obj.sizeY], [obj.frames(1) obj.frames(1)] }); % read first frame                
         end
+    end
     
+    %% Find the peaks and choose threshold h_min
     p = find_peaks2d(img, r_find, 0, 0); % finding all possible peaks p has x, y, height, height-bg, I, I-I_bg
 
     close all
