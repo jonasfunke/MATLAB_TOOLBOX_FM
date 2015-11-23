@@ -10,6 +10,16 @@ function [h_min, p_out] = get_h_min(obj, r_find, N_img, varargin)
     %           positions of peaks with value higher than threshold
     % Example = get_h_min(obj, 4, 100, 'autosigma', 5)
     
+    %% Parse input
+    q = inputParser;
+    
+    addRequired(q, 'obj', @isobject);
+    addRequired(q, 'r_find', @isnumeric);
+    addOptional(q, 'N_img', @isnumeric);
+    addParameter(q, 'autosigma', 0, @isnumeric);
+    
+    parse(q, obj, r_find, N_img, varargin{:});
+    
     %% Choose image for peak finding
     if exist('N_img', 'var') % use average frame
         img = obj.average_image(N_img); % average first N_img images
