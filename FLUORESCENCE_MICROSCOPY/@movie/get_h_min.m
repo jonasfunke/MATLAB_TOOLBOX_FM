@@ -1,6 +1,3 @@
-function [h_min, p_out] = get_h_min(obj, r_find, N_img)
-    % determine peak-finding threshholds
-
         if exist('N_img', 'var') % use average frame
          img = obj.average_image(N_img); % average frist N_img images
         else % use first frame if N_img is not specified
@@ -9,6 +6,18 @@ function [h_min, p_out] = get_h_min(obj, r_find, N_img)
             else % fits
                 img = fitsread([obj.pname filesep obj.fname{1}],  'Info', obj.info{1}, 'PixelRegion',{[1 obj.sizeX], [1 obj.sizeY], [obj.frames(1) obj.frames(1)] }); % read first frame                
             end
+function [h_min, p_out] = get_h_min(obj, r_find, N_img, varargin)
+    %% determines peak-finding thresholds
+    %   INPUTS: movie object
+    %           'r_find' defines the spacing of the peaks
+    %           'N_img' (can be omitted) gives number of images for average image
+    %           'autosigma' (optional parameter) gives sigma multiplier
+    %           value for automatic threshold
+    %
+    %   OUTPUTS:intensity threshold h_min
+    %           positions of peaks with value higher than threshold
+    % Example = get_h_min(obj, 4, 100, 'autosigma', 5)
+    
         end
     
     p = find_peaks2d(img, r_find, 0, 0); % finding all possible peaks p has x, y, height, height-bg, I, I-I_bg
