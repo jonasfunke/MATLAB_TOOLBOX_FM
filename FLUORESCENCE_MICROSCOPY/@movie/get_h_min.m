@@ -20,6 +20,8 @@ function [h_min, p_out] = get_h_min(obj, r_find, N_img, varargin)
     
     parse(q, obj, r_find, N_img, varargin{:});
     
+    autosigma = q.Results.autosigma;
+    
     %% Choose image for peak finding
     if exist('N_img', 'var') % use average frame
         img = obj.average_image(N_img); % average first N_img images
