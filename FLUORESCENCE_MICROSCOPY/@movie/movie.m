@@ -23,8 +23,9 @@ classdef movie < handle
         
         input; % 0=fits, 1=tiff-stack
         fnames; % cell with all filenames, only for tiff-stack
-        
-        N_frame_per_fits; % stores the number of frames in one fits-file
+
+        N_frame_per_fits; % stores the number of frames in one fits file
+        add_upon_reading; % value added to frame after fitsread. Depends on .fits intercept
         
         drift; % stores displacement in x and y over whole movie through drift.
     end
@@ -55,6 +56,7 @@ classdef movie < handle
                 obj.info{1} = fitsinfo([obj.pname filesep obj.fname{1}]);
                 
                 obj.N_frame_per_fits = 4095; %obj.info{1}.PrimaryData.Size(3);
+                obj.add_upon_reading = (obj.info{1}.PrimaryData.Intercept==0)*32768;
                 
                 obj.sizeX = obj.info{1}.PrimaryData.Size(1); 
                 obj.sizeY = obj.info{1}.PrimaryData.Size(2);
@@ -92,7 +94,18 @@ classdef movie < handle
         [ avg_frame ] = average_image(obj, N_min, N_frame )
         
         % determine peak-finding thresholds
-        [h_min, p_out] = get_h_min(obj, r_find, N_img)   
+
+        [h_min, p_out] = get_h_min(obj, r_find, N_img)
+        
+        % obtain intensity time traces by integrating specific ROIs in movie
+        itraces = traces_movie_position(obj, positions, r_integrate)
+        
+        % integrate intensities over specific ROIs in one frame (suitable for parfor)
+        ints = int_spots_in_frame(obj, frame_idx, spots_pos, d_int)
+        
+        % integrate intensities over specific ROIs in many frames (returns
+        % spot intensity traces)
+        itraces = int_spots_in_frames(obj, frame_nums, spots_pos, d_int)
     
     end
       
