@@ -16,10 +16,10 @@ classdef movie < handle
         
         sizeX; % number of pixel in X-dimension
         sizeY; % number of pixel in Y-dimension
-        mov_length; % number of frames in thw whole movue
+        mov_length; % number of frames in the whole movie
         
         info; % fits info
-        h_min; % minimal heigth for peak fidning
+        h_min; % minimal height for peak finding
         
         input; % 0=fits, 1=tiff-stack
         fnames; % cell with all filenames, only for tiff-stack
@@ -59,7 +59,7 @@ classdef movie < handle
                 obj.sizeX = obj.info{1}.PrimaryData.Size(1); 
                 obj.sizeY = obj.info{1}.PrimaryData.Size(2);
                 
-                tmp = dir([pname filesep fname(1:end-4) '_X*.fits']); %returns additional  change * to wildcard for 1-2 character/integers
+                tmp = dir([pname filesep fname(1:end-4) '_X*.fits']); % change * to wildcard for 1-2 character/integers
                 [~,idx] = sort([tmp.datenum]);
                 tmp = tmp(idx);
                 for i=1:length(tmp)
