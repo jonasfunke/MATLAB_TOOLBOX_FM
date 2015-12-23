@@ -23,11 +23,9 @@ classdef movie < handle
         
         input; % 0=fits, 1=tiff-stack
         fnames; % cell with all filenames, only for tiff-stack
-        
 
         N_frame_per_fits; % stores the number of frames in one fits file
-        add_upon_reading; % value added to frame after fitsread. Depends on .fits intercept (
-
+        add_upon_reading; % value added to frame after fitsread. Depends on .fits intercept
         
         drift; % stores displacement in x and y over whole movie through drift.
     end
@@ -108,7 +106,6 @@ classdef movie < handle
         % integrate intensities over specific ROIs in many frames (returns
         % spot intensity traces)
         itraces = int_spots_in_frames(obj, frame_nums, spots_pos, d_int)
-
     
     end
       
