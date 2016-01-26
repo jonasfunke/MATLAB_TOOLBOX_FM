@@ -1,4 +1,4 @@
-function [ gelData, cur_fig ] = check_gel_saturation( gelData )
+function [ gelData ] = check_gel_saturation( gelData )
 %checks if gelData.images contains images that are saturated
 %   Input: gelData with field images
 %   Output: gelData with additional field saturation
@@ -26,7 +26,6 @@ function [ gelData, cur_fig ] = check_gel_saturation( gelData )
         else
             disp(['Image ' num2str(i) ' is good.'])
         end    
-
     end
 
     gelData.saturation = saturated;
