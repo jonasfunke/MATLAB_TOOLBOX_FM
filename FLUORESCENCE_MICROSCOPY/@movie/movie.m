@@ -96,7 +96,7 @@ classdef movie < handle
         initRead(obj)
         
         % generate average image, starting from first frame until N_max
-        [ avg_frame ] = average_image(obj, N_min, N_frame )
+        [avg_frame] = average_image(obj, varargin)
         
         % determine peak-finding thresholds
 
