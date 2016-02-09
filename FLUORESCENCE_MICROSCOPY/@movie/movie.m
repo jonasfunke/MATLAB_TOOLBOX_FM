@@ -3,7 +3,7 @@ classdef movie < handle
     %   Detailed explanation goes here
     
     properties
-        frames; %all images to be read
+        frames; % all images to be read
         N_read = 300; % number of images to read in one portion
         counter = 1; % internal counter for reading the movie
         
@@ -11,20 +11,21 @@ classdef movie < handle
         first; % first image to be read
         last; % last image to be read
         
-        pname; %pathname of file location
-        fname; %filename of file
+        pname; % pathname of file location
+        fname; % filename of file
         
         sizeX; % number of pixel in X-dimension
         sizeY; % number of pixel in Y-dimension
-        mov_length; % number of frames in thw whole movue
+        mov_length; % number of frames in the whole movie
         
-        info; %fits info
-        h_min; %minimal heigth for peak fidning
+        info; % fits info
+        h_min; % minimal height for peak finding
         
         input; % 0=fits, 1=tiff-stack
         fnames; % cell with all filenames, only for tiff-stack
-        
-        N_frame_per_fits; % stores the number of frames in one fits-file
+
+        N_frame_per_fits; % stores the number of frames in one fits file
+        add_upon_reading; % value added to frame after fitsread. Depends on .fits intercept
         
         drift; % stores displacement in x and y over whole movie through drift.
     end
@@ -55,11 +56,12 @@ classdef movie < handle
                 obj.info{1} = fitsinfo([obj.pname filesep obj.fname{1}]);
                 
                 obj.N_frame_per_fits = 4095; %obj.info{1}.PrimaryData.Size(3);
+                obj.add_upon_reading = (obj.info{1}.PrimaryData.Intercept==0)*32768;
                 
                 obj.sizeX = obj.info{1}.PrimaryData.Size(1); 
                 obj.sizeY = obj.info{1}.PrimaryData.Size(2);
                 
-                tmp = dir([pname filesep fname(1:end-4) '_X*.fits']); %returns additional  change * to wildcard for 1-2 character/integers
+                tmp = dir([pname filesep fname(1:end-4) '_X*.fits']); % change * to wildcard for 1-2 character/integers
                 [~,idx] = sort([tmp.datenum]);
                 tmp = tmp(idx);
                 for i=1:length(tmp)
@@ -76,8 +78,35 @@ classdef movie < handle
             disp('Movie class created.')
         end
         
-        % read frames
+        % generate a list of images to be read from the movie
         frames = getFrames(obj, sequence, first, last)
+        
+        % reads one frame
+        [img] = readFrame(obj,framenumber)
+        
+        % reads the next N_read frames
+        [tmp, frames_out, go_on] = readNext(obj)
+        
+        % initialize the counter
+        initRead(obj)
+        
+        % generate average image, starting from first frame until N_max
+        [ avg_frame ] = average_image(obj, N_min, N_frame )
+        
+        % determine peak-finding thresholds
+
+        [h_min, p_out] = get_h_min(obj, r_find, N_img)
+        
+        % obtain intensity time traces by integrating specific ROIs in movie
+        itraces = traces_movie_position(obj, positions, r_integrate)
+        
+        % integrate intensities over specific ROIs in one frame (suitable for parfor)
+        ints = int_spots_in_frame(obj, frame_idx, spots_pos, d_int)
+        
+        % integrate intensities over specific ROIs in many frames (returns
+        % spot intensity traces)
+        itraces = int_spots_in_frames(obj, frame_nums, spots_pos, d_int)
+    
     end
       
 end        
