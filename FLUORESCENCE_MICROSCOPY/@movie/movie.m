@@ -71,7 +71,12 @@ classdef movie < handle
                 
                 f_tot = 0; % calculate total number of frames
                 for i=1:length(obj.fname)
-                    f_tot = f_tot + obj.info{i}.PrimaryData.Size(3);           
+                    switch length(obj.info{i}.PrimaryData.Size)
+                        case 3
+                            f_tot = f_tot + obj.info{i}.PrimaryData.Size(3); 
+                        case 2
+                            f_tot= f_tot + 1;
+                    end           
                 end
                 obj.mov_length = f_tot;
             end
@@ -95,7 +100,7 @@ classdef movie < handle
         
         % determine peak-finding thresholds
 
-        [h_min, p_out] = get_h_min(obj, r_find, N_img)
+        [h_min, p_out] = get_h_min(obj, r_find, N_img, varargin)
         
         % obtain intensity time traces by integrating specific ROIs in movie
         itraces = traces_movie_position(obj, positions, r_integrate)
