@@ -80,6 +80,7 @@ classdef movie < handle
                 end
                 obj.mov_length = f_tot;
             end
+            obj.frames = obj.getFrames(sequence, first, first+f_tot-1);
             disp('Movie class created.')
         end
         
