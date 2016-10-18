@@ -2,8 +2,8 @@ function [tmp, frames_out, go_on] = readNext(obj)
     %reads the next N_read frames
     read_stop = obj.counter+obj.N_read-1; % last frame to read
     go_on = 1;
-        if read_stop >= obj.mov_length
-            read_stop = obj.mov_length;
+        if read_stop >= length(obj.frames)
+            read_stop = length(obj.frames);
             go_on = 0;
         end
 
