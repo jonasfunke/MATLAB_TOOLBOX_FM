@@ -56,7 +56,17 @@ classdef movie < handle
                 obj.info{1} = fitsinfo([obj.pname filesep obj.fname{1}]);
                 
                 obj.N_frame_per_fits = 4095; %obj.info{1}.PrimaryData.Size(3);
-                obj.add_upon_reading = (obj.info{1}.PrimaryData.Intercept==0)*32768;
+                
+                if obj.info{1}.PrimaryData.Intercept==0
+                    tmp = fitsread([pname filesep fname],'PixelRegion',{[1 obj.sizeX],[1 obj.sizeY],[1 1]});
+                    if max(tmp(:)) < -2^8 && min(tmp(:))>-2^16;
+                        obj.add_upon_reading = 2^16;
+                    else
+                        obj.add_upon_reading = 0;
+                    end
+                else
+                    obj.add_upon_reading = 0;
+                end
                 
                 obj.sizeX = obj.info{1}.PrimaryData.Size(1); 
                 obj.sizeY = obj.info{1}.PrimaryData.Size(2);
